@@ -5,5 +5,5 @@
 </script>
 
 <div>
-    <p>Got ping response: {data.result}</p>
+    <p>Got {data.pong.result} response from ping</p>
 </div>

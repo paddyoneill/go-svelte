@@ -1,31 +1,24 @@
 package main
 
 import (
-	"encoding/json"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+
+	api "github.com/paddyoneill/go-svelte/openapi"
 )
 
-type PingResponse struct {
-	Result string `json:"result"`
-}
-
 func main() {
+	server := api.NewServer()
 	router := http.NewServeMux()
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		viteURL, _ := url.Parse("http://localhost:5173")
 		reverseViteProxy := httputil.NewSingleHostReverseProxy(viteURL)
 		reverseViteProxy.ServeHTTP(w, r)
 	})
-	router.HandleFunc("GET /ping", handleGetPing)
+	handler := api.HandlerFromMux(server, router)
 
-	if err := http.ListenAndServe(":8080", router); err != nil {
+	if err := http.ListenAndServe("localhost:8080", handler); err != nil {
 		panic(err)
 	}
-}
-
-func handleGetPing(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(PingResponse{Result: "pong"})
 }

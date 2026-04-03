@@ -1,14 +1,23 @@
-import type { PingResponse } from "$lib/types";
 import type { PageLoad } from "./$types";
+import createClient from "openapi-fetch";
+import type { paths } from "$lib/api";
 
-export const load: PageLoad = async ({ fetch }): Promise<{ result: PingResponse }> => {
-    const response = await fetch('/ping');
+const client = createClient<paths>();
 
-    if (!response.ok) {
-        return { result: { "result": "failed" } };
+export const load: PageLoad = async ({ fetch }) => {
+    const resp = await client.GET("/ping")
+    if (resp.data === undefined) {
+        return {
+            pong: {
+                result: "",
+            }
+        }
     }
 
-    const result = await response.json();
+    return {
+        pong: {
+            result: resp.data.result,
+        }
+    }
 
-    return result;
 };

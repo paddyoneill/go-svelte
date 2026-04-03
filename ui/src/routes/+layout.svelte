@@ -9,3 +9,7 @@
 </svelte:head>
 
 {@render children()}
+
+<p>
+	<a href="/ping">Ping backend</a>
+</p>
