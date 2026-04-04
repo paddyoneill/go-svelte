@@ -9,8 +9,14 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-{@render children()}
+<nav>
+	<ul>
+		<li><strong>Go Svelte</strong></li>
+	</ul>
+	<ul>
+		<li><a class="contrast" href="/">Home</a></li>
+		<li><a class="contrast" href="/ping">Ping</a></li>
+	</ul>
+</nav>
 
-<p>
-	<a href="/ping">Ping backend</a>
-</p>
+{@render children()}
