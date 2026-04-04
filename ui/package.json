@@ -13,6 +13,7 @@
 		"oapi:gen:client": "npx openapi-typescript ../openapi/spec.yaml -o src/lib/api.d.ts"
 	},
 	"devDependencies": {
+		"@picocss/pico": "^2.1.1",
 		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/kit": "^2.50.2",
 		"@sveltejs/vite-plugin-svelte": "^6.2.4",
