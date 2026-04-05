@@ -3,16 +3,13 @@
     import type { components } from "$lib/api";
     import { goto } from "$app/navigation";
 
-    let newEntryFormData: components["schemas"]["Entry"] = $state({
-        entry: "",
-        id: 0,
-    });
+    let Entry = $state() as components["schemas"]["Entry"];
 
     async function createNewEntry(event: Event) {
         event.preventDefault();
 
         const response = await APIClient.POST("/entry", {
-            body: newEntryFormData,
+            body: Entry,
         });
 
         if (response.error) {
@@ -30,16 +27,12 @@
 >
     <label>
         <span>ID</span>
-        <input type="number" bind:value={newEntryFormData.id} />
+        <input type="number" bind:value={Entry.id} />
     </label>
 
     <label>
         <span>Entry</span>
-        <input
-            type="text"
-            bind:value={newEntryFormData.entry}
-            placeholder="entry"
-        />
+        <input type="text" bind:value={Entry.entry} placeholder="entry" />
     </label>
 
     <button type="submit">Create</button>
