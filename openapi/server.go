@@ -13,6 +13,12 @@ import (
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
+	// (GET /entry)
+	GetEntry(w http.ResponseWriter, r *http.Request)
+
+	// (POST /entry)
+	PostEntry(w http.ResponseWriter, r *http.Request)
+
 	// (GET /ping)
 	GetPing(w http.ResponseWriter, r *http.Request)
 }
@@ -25,6 +31,34 @@ type ServerInterfaceWrapper struct {
 }
 
 type MiddlewareFunc func(http.Handler) http.Handler
+
+// GetEntry operation middleware
+func (siw *ServerInterfaceWrapper) GetEntry(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetEntry(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// PostEntry operation middleware
+func (siw *ServerInterfaceWrapper) PostEntry(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostEntry(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
 
 // GetPing operation middleware
 func (siw *ServerInterfaceWrapper) GetPing(w http.ResponseWriter, r *http.Request) {
@@ -160,6 +194,8 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 		ErrorHandlerFunc:   options.ErrorHandlerFunc,
 	}
 
+	m.HandleFunc("GET "+options.BaseURL+"/entry", wrapper.GetEntry)
+	m.HandleFunc("POST "+options.BaseURL+"/entry", wrapper.PostEntry)
 	m.HandleFunc("GET "+options.BaseURL+"/ping", wrapper.GetPing)
 
 	return m

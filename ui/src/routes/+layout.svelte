@@ -16,6 +16,7 @@
 	<ul>
 		<li><a class="contrast" href="/">Home</a></li>
 		<li><a class="contrast" href="/ping">Ping</a></li>
+		<li><a class="contrast" href="/entry">Entry</a></li>
 	</ul>
 </nav>
 

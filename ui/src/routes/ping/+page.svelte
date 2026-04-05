@@ -1,9 +1,11 @@
 <script lang="ts">
-    import type { PageData } from "./$types";
+    import type { PageProps } from "./$types";
 
-    let { data }: { data: PageData } = $props();
+    let { data }: PageProps = $props();
 </script>
 
-<div>
-    <p>Got {data.pong.result} response from ping</p>
-</div>
+{#if data.pong}
+    <div>
+        <p>Got {data.pong.result} response from ping</p>
+    </div>
+{/if}

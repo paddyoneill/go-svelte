@@ -2,22 +2,11 @@ import type { PageLoad } from "./$types";
 import createClient from "openapi-fetch";
 import type { paths } from "$lib/api";
 
-const client = createClient<paths>();
+const client = createClient<paths>({ baseUrl: "/api" });
 
 export const load: PageLoad = async ({ fetch }) => {
-    const resp = await client.GET("/ping")
-    if (resp.data === undefined) {
-        return {
-            pong: {
-                result: "",
-            }
-        }
-    }
-
-    return {
-        pong: {
-            result: resp.data.result,
-        }
-    }
-
+    const response = await client.GET("/ping", {
+        fetch: fetch,
+    })
+    return { pong: response.data }
 };

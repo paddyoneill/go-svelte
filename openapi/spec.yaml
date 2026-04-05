@@ -13,6 +13,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Pong"
+  /entry:
+    get:
+      description: Get all entries
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EntryList"
+    post:
+      description: Create new entry
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Entry"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json: {}
+        "400":
+          description: Bad Request
 components:
   schemas:
     Pong:
@@ -23,3 +47,19 @@ components:
           example: pong
       required:
         - result
+    Entry:
+      type: object
+      properties:
+        entry:
+          type: string
+          example: some entry
+        id:
+          type: integer
+          example: 1
+      required:
+        - entry
+        - id
+    EntryList:
+      type: array
+      items:
+        $ref: "#/components/schemas/Entry"
